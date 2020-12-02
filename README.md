@@ -8,36 +8,36 @@ One historical bulk file is utilized for this project and one api for the most r
 # Solution & Result
 The following presents the data flow of the historical data from HistTemp-file.  Firstly the data is loaded into HDFS and HBase using Python. The script “writeHdfs.py” accesses the file from The Pudding-repository and runs the terminal command to put the file into the HDFS as a comma separated value file. The file that is now stored in HDFS is then put into an HBase table by the HBase ImportTsv utility that will load data originally in TSV format into HBase. It is loading data from TSV format in HDFS into HBase via Puts. Next, one can pass an argument Dimporttsv.separator = ‘,’ to specify the comma as the deliminator. Next, the most recent 7 days of temperature data is loaded from the CurrWeekTemp-API into the saved prediction model. 
 
-![Images](Figure 1.png)
-<BILD Figure 1: Data flow>
+![](https://github.com/alexanderbea/Weather-prediction-on-Mars-using-LSTM-NN-HDFS-and-HBase/blob/main/Images/Figure%201.PNG)
+
 
 As illustrated in Figure 1 the data is loaded into the training-notebook. Inside the training-notebook, the temperature data is normalized and batched up into 7 day’s batches, split the batches into training (70%), validation (15%) and test (15%), whereafter load it into the Recurrent Neural Network with Keras [4] through Tensorflow [5] and train, validate and test the model.  Next, the SGD optimizer is applied with MSE as a loss-function. Thereafter, apply one Long Short Term Memory (LSTM) layer with 128 neurons, one Bidirectional LSTM with 64 neurons and one Dense layer. The RNN model proved to be well-suited for the time series prediction task. It is mostly used to predict a future outcome based on the previous sequential inputs, it uses their memory (also called states) to predict sequence outputs [5]. The following  loss and mean absolute error (MAE) shows that the model successfully manages to optimize the learning of the training data and generalize it so that the validation shows successfully low loss and MAE rates:
 
-<BILD Figure 2: Loss from training vs validation>
-
-<BILD Figure 3: MAE from training vs validation>
+![](https://github.com/alexanderbea/Weather-prediction-on-Mars-using-LSTM-NN-HDFS-and-HBase/blob/main/Images/Figure%202%20%26%203.PNG)
 
 Next, apply the temperature prediction to test-data and plot it with the historical actual temperature data:
 
-<BILD Figure 4: Loss from training vs validation>
+![](https://github.com/alexanderbea/Weather-prediction-on-Mars-using-LSTM-NN-HDFS-and-HBase/blob/main/Images/Figure%204.PNG)
 
 In Figure 4, it becomes clear that the prediction is fairly accurate. Thereafter, save the model to disk so that one can load it in our prediction notebook in the next step. In the next Figure 5, plot the previous 7 days min, max and average temperature that have been loaded from the CurrWeekTemp-API in our prediction-notebook as well as the day-a-head average temperature prediction (marked red as a red star).
 
-<BILD Figure 5: Loss from training vs validation>
+![](https://github.com/alexanderbea/Weather-prediction-on-Mars-using-LSTM-NN-HDFS-and-HBase/blob/main/Images/Figure%205.PNG)
 
-#How to run the code
+# How to run the code
 1.	Create HDFS directory and fill with archive data:
+
 [1] $HADOOP_HOME/bin/hdfs dfs -mkdir /mars-weather
-	>>> creates the directory for the archive data
+>>> creates the directory for the archive data
+
 [2] python3 writeHdfs.py
-	>>> runs the script that pulls the archive data into the ‘mars-weather’ directory
+>>> runs the script that pulls the archive data into the ‘mars-weather’ directory
 
 2.	Pull data from HDFS into HBase
-[1] cd /user/hbase
+[Step 1] cd /user/hbase
 >>> then open the hbase shell and create target table>
-[2] create ‘archive’, {NAME=> ‘cf’}
+[Step 2] create ‘archive’, {NAME=> ‘cf’}
 >>> exit hbase shell and execute following command
-[3] hbase org.apache.hadoop.hbase.mapreduce.ImportTsv -Dimporttsv.separator=, -Dimporttsv.columns=’HBASE_ROW_KEY, cf:id, cf:date, cf:sol, cf:ls, cf:season, cf:min_temp, cf:max_temp, cf:pressure, cf:wind_speed, cf:atmo_opacity’ archive /mars-weather/archive.csv
+[Step 3] hbase org.apache.hadoop.hbase.mapreduce.ImportTsv -Dimporttsv.separator=, -Dimporttsv.columns=’HBASE_ROW_KEY, cf:id, cf:date, cf:sol, cf:ls, cf:season, cf:min_temp, cf:max_temp, cf:pressure, cf:wind_speed, cf:atmo_opacity’ archive /mars-weather/archive.csv
 
 3.	Run the “ProjectNotebook_Training.ipynb” in Jupyter Notebook, 
 a.	However first make sure that you set the parameter runLocallyOrOnDrive  to  'Drive' or 'Local' (if you are running it in Colab, ‘Drive’ is possible, however, you will have to link your Google Drive), this variable only saves the prediction model to drive or local disk
@@ -47,7 +47,8 @@ d.	Now you can run the entire notebook
 
 4.	Now that you have run the training and saved the model to local or drive you can run the prediction-notebook “ProjectNotebook_NextDayPrediction.ipynb”
 a.	Change the variable runLocallyOrOnDrive previously to what you choose to run before i.e. Drive or Local, now you can run the notebook
-References 
+
+# References 
 [1] ESA. 2020. The European Space Agency. Available from: <http://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/Exploration/Why_go_to_Mars> [2020-10-21].
 
 [2] Pudding. 2020. Digital publication that explains ideas debated in culture with visual essays. Available from: <https://pudding.cool/2017/12/mars-data/marsWeather.json> [2020-10-21].
