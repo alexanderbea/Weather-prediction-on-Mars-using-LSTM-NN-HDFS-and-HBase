@@ -24,29 +24,33 @@ In Figure 4, it becomes clear that the prediction is fairly accurate. Thereafter
 ![](https://github.com/alexanderbea/Weather-prediction-on-Mars-using-LSTM-NN-HDFS-and-HBase/blob/main/Images/Figure%205.PNG)
 
 # How to run the code
-1.	Create HDFS directory and fill with archive data:
+1. Create HDFS directory and fill with archive data:
 
-[1] $HADOOP_HOME/bin/hdfs dfs -mkdir /mars-weather
->>> creates the directory for the archive data
+[Step 1] $HADOOP_HOME/bin/hdfs dfs -mkdir /mars-weather
+- creates the directory for the archive data
 
-[2] python3 writeHdfs.py
->>> runs the script that pulls the archive data into the ‘mars-weather’ directory
+[Step 2] python3 writeHdfs.py
+- runs the script that pulls the archive data into the ‘mars-weather’ directory
 
-2.	Pull data from HDFS into HBase
+2. Pull data from HDFS into HBase
+
 [Step 1] cd /user/hbase
->>> then open the hbase shell and create target table>
+- then open the hbase shell and create target table>
+
 [Step 2] create ‘archive’, {NAME=> ‘cf’}
->>> exit hbase shell and execute following command
+- exit hbase shell and execute following command
+
 [Step 3] hbase org.apache.hadoop.hbase.mapreduce.ImportTsv -Dimporttsv.separator=, -Dimporttsv.columns=’HBASE_ROW_KEY, cf:id, cf:date, cf:sol, cf:ls, cf:season, cf:min_temp, cf:max_temp, cf:pressure, cf:wind_speed, cf:atmo_opacity’ archive /mars-weather/archive.csv
 
-3.	Run the “ProjectNotebook_Training.ipynb” in Jupyter Notebook, 
-a.	However first make sure that you set the parameter runLocallyOrOnDrive  to  'Drive' or 'Local' (if you are running it in Colab, ‘Drive’ is possible, however, you will have to link your Google Drive), this variable only saves the prediction model to drive or local disk
-b.	Next, change the path to where you want to save the prediction model (the variable “saveModelPath” and “saveModelPathH5” need to be changed for this).
-c.	Thereafter, select whether you want to extract the historical data from the Pudding-API or from HBase, API or Drive (define the variable loadHistoricalDataFrom to “HBASE”, "API" or “Drive)
-d.	Now you can run the entire notebook
+3. Run the “ProjectNotebook_Training.ipynb” in Jupyter Notebook, 
 
-4.	Now that you have run the training and saved the model to local or drive you can run the prediction-notebook “ProjectNotebook_NextDayPrediction.ipynb”
-a.	Change the variable runLocallyOrOnDrive previously to what you choose to run before i.e. Drive or Local, now you can run the notebook
+- However first make sure that you set the parameter runLocallyOrOnDrive  to  'Drive' or 'Local' (if you are running it in Colab, ‘Drive’ is possible, however, you will have to link your Google Drive), this variable only saves the prediction model to drive or local disk
+- Next, change the path to where you want to save the prediction model (the variable “saveModelPath” and “saveModelPathH5” need to be changed for this).
+- Thereafter, select whether you want to extract the historical data from the Pudding-API or from HBase, API or Drive (define the variable loadHistoricalDataFrom to “HBASE”, "API" or “Drive)
+- Now you can run the entire notebook
+
+4. Now that you have run the training and saved the model to local or drive you can run the prediction-notebook “ProjectNotebook_NextDayPrediction.ipynb”
+- Change the variable runLocallyOrOnDrive previously to what you choose to run before i.e. Drive or Local, now you can run the notebook
 
 # References 
 [1] ESA. 2020. The European Space Agency. Available from: <http://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/Exploration/Why_go_to_Mars> [2020-10-21].
