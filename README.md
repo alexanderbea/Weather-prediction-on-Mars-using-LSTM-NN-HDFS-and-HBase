@@ -25,22 +25,13 @@ In Figure 4, it becomes clear that the prediction is fairly accurate. Thereafter
 
 # How to run the code
 1. Create HDFS directory and fill with archive data:
-
-[Step 1] $HADOOP_HOME/bin/hdfs dfs -mkdir /mars-weather
-- creates the directory for the archive data
-
-[Step 2] python3 writeHdfs.py
-- runs the script that pulls the archive data into the ‘mars-weather’ directory
+- $HADOOP_HOME/bin/hdfs dfs -mkdir /mars-weather -- creates the directory for the archive data
+- python3 writeHdfs.py -- runs the script that pulls the archive data into the ‘mars-weather’ directory
 
 2. Pull data from HDFS into HBase
-
-[Step 1] cd /user/hbase
-- then open the hbase shell and create target table>
-
-[Step 2] create ‘archive’, {NAME=> ‘cf’}
-- exit hbase shell and execute following command
-
-[Step 3] hbase org.apache.hadoop.hbase.mapreduce.ImportTsv -Dimporttsv.separator=, -Dimporttsv.columns=’HBASE_ROW_KEY, cf:id, cf:date, cf:sol, cf:ls, cf:season, cf:min_temp, cf:max_temp, cf:pressure, cf:wind_speed, cf:atmo_opacity’ archive /mars-weather/archive.csv
+- cd /user/hbase -- then open the hbase shell and create target table>
+- create ‘archive’, {NAME=> ‘cf’} -- exit hbase shell and execute following command
+- hbase org.apache.hadoop.hbase.mapreduce.ImportTsv -Dimporttsv.separator=, -Dimporttsv.columns=’HBASE_ROW_KEY, cf:id, cf:date, cf:sol, cf:ls, cf:season, cf:min_temp, cf:max_temp, cf:pressure, cf:wind_speed, cf:atmo_opacity’ archive /mars-weather/archive.csv
 
 3. Run the “ProjectNotebook_Training.ipynb” in Jupyter Notebook, 
 
