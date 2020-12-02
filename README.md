@@ -19,7 +19,7 @@ Next, apply the temperature prediction to test-data and plot it with the histori
 
 ![](https://github.com/alexanderbea/Weather-prediction-on-Mars-using-LSTM-NN-HDFS-and-HBase/blob/main/Images/Figure%204.PNG)
 
-In Figure 4, it becomes clear that the prediction is fairly accurate. Thereafter, save the model to disk so that one can load it in our prediction notebook in the next step. In the next Figure 5, plot the previous 7 days min, max and average temperature that have been loaded from the CurrWeekTemp-API in our prediction-notebook as well as the day-a-head average temperature prediction (marked red as a red star).
+In Figure 4, it becomes clear that the prediction is fairly accurate. Thereafter, save the model to disk so that one can load it in the prediction notebook in the next step. In the next Figure 5, plot the previous 7 days min, max and average temperature that have been loaded from the CurrWeekTemp-API in the prediction-notebook as well as the day-a-head average temperature prediction (marked red as a red star).
 
 ![](https://github.com/alexanderbea/Weather-prediction-on-Mars-using-LSTM-NN-HDFS-and-HBase/blob/main/Images/Figure%205.PNG)
 
